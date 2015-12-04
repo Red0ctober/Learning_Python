@@ -11,7 +11,7 @@ class Time(object):
 		print self.current_time
 
 #This function advances the time of day by the number of specified hours.
-#In the even that an activity takes more than one, it can accomidate.
+#In the even that an activity takes more than one, it can accommodate.
 	def advance_tod(self, hours):  
 		self.current_time = self.current_time + hours
 		#print self.current_time
