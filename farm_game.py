@@ -52,7 +52,7 @@ class TownArea(Scene):
 		action = raw_input("> ")
 
 		if action == 'field':
-			game_time.advance_tod(15)
+			game_time.x.advance_tod(15)
 			return 'farm'
 
 class TownShops(Scene):
@@ -101,4 +101,4 @@ a_map = Map('home')
 a_game = Engine(a_map)
 a_game.play()
 
-game_time.advance_day()
+game_time.x.advance_day()

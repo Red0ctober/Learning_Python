@@ -22,7 +22,7 @@ class Time(object):
 			self.current_time = 8
 			return 'home'
 
-#x = Time()
+x = Time()
 #x.advance_tod(12)
 #x.advance_day()
 #print x.day
