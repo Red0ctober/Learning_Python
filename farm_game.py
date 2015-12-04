@@ -1,5 +1,7 @@
 from sys import exit
-import time
+import game_time
+
+
 
 class Scene(object):
 
@@ -28,12 +30,30 @@ class Engine(object):
 class House(Scene):
 	
 	def enter(self):
-		pass
+		print "Test string"
+
+		action = raw_input("> ")
+
+		if action == "town":
+			return 'town'
 
 class Field(Scene):
 	
 	def enter(self):
 		pass
+
+class TownArea(Scene):
+
+	def enter(self):
+		print "You are just outside of town.  From here"
+		print "you can go to any of the places in town or"
+		print "back home."
+
+		action = raw_input("> ")
+
+		if action == 'field':
+			game_time.advance_tod(15)
+			return 'farm'
 
 class TownShops(Scene):
 	
@@ -50,14 +70,21 @@ class TownWaterfront(Scene):
 	def enter(self):
 		pass
 
+class EndOfGame(Scene):
+
+	def enter(self):
+		pass
+
 class Map(object):
 
 	scenes = {
 		'home': House(),
 		'farm': Field(),
+		'town': TownArea(),
 		'shops': TownShops(),
 		'Square': TownSquare(),
 		'Waterfront': TownWaterfront(),
+		'finished': EndOfGame(),
 	}
 
 	def __init__(self, start_scene):
@@ -70,6 +97,8 @@ class Map(object):
 	def opening_scene(self):
 		return self.next_scene(self.start_scene)
 
-a_map = Map()
+a_map = Map('home')
 a_game = Engine(a_map)
 a_game.play()
+
+game_time.advance_day()
