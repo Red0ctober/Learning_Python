@@ -25,25 +25,39 @@ class Engine(object):
 		current_scene.enter()
 
 
+class House(Scene):
+	
+	def enter(self):
+		pass
 
+class Field(Scene):
+	
+	def enter(self):
+		pass
 
+class TownShops(Scene):
+	
+	def enter(self):
+		pass
 
+class TownSquare(Scene):
+	
+	def enter(self):
+		pass
 
-
-
-
-
-
-
-
-
-
-
+class TownWaterfront(Scene):
+	
+	def enter(self):
+		pass
 
 class Map(object):
 
 	scenes = {
-
+		'home': House(),
+		'farm': Field(),
+		'shops': TownShops(),
+		'Square': TownSquare(),
+		'Waterfront': TownWaterfront(),
 	}
 
 	def __init__(self, start_scene):
