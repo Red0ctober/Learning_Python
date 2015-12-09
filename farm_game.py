@@ -23,7 +23,8 @@ class Engine(object):
 			next_scene_name, hours = current_scene.enter()
 			new_day = gtime.advance_tod(hours)
 			if new_day:
-				print 'Script placeholder, will change'
+				print "The sun decends below the horizon as you walk."
+				print "It is time to go home."
 				current_scene =  self.scene_map.next_scene('home')
 			else:
 				current_scene = self.scene_map.next_scene(next_scene_name)
@@ -53,7 +54,9 @@ class Field(Scene):
 		print "From here you can go into your house, or you could walk into"
 		print "town."
 
-		action = raw_input("> ")
+		cur_loc = Actions('farm')
+		action = cur_loc.user_prompt('farm')
+		return (action)
 
 class TownArea(Scene):
 
@@ -61,16 +64,10 @@ class TownArea(Scene):
 		print "You are just outside of town.  From here"
 		print "you can go to any of the places in town or"
 		print "back home."
-		print "%d:00" %gtime.current_time
 
-		action = raw_input("> ")
-
-		if action == 'farm':
-			return ('farm',1)
-		elif action == 'home':
-			return ('home',1)
-		elif action == 'shops':
-			return ('shops',0)
+		cur_loc = Actions('town')
+		action = cur_loc.user_prompt('town')
+		return (action)
 
 class TownShops(Scene):
 	
@@ -82,25 +79,48 @@ class TownShops(Scene):
 			print "A sign on the door of Farming Supplies says their open hours are"
 			print "between 7:00 and 19:00."
 
+			cur_loc = Actions('shops')
+			action = cur_loc.user_prompt('shops')
+			return (action)
+
 		else:
 			print "You go to the shops by the town square.  There are a number"
 			print "of them, but only one of them has what you need for farming."
 			print "Called simply Farming Supplies, it has everything you could"
 			print "possibly need."
-			print ""
+
+			cur_loc = Actions('shops')
+			action = cur_loc.user_prompt('shops')
+			return (action)
+
 
 class TownSquare(Scene):
 	
 	def enter(self):
-		pass
+		print "The town square is located at the center of town.  Many festivals"
+		print "are held here each year."
 
-class TownWaterfront(Scene):
+		cur_loc = Actions('square')
+		action = cur_loc.user_prompt('square')
+		return (action)
+
+class Waterfront(Scene):
 	
 	def enter(self):
-		pass
+		print "The crashing of waves is audible as you approach, announcing the ocean's presence long"
+		print "before it can be seen.  As you reach the apex of the sandy dune the cool ocean air"
+		print "whips your face.  You stand in awe of the ocean's might for a while.  After about an"
+		print "hour, you decide to head back."
+
+		gtime.advance_tod(1)
+
+		cur_loc = Actions('waterfront')
+		action = cur_loc.user_prompt('waterfront')
+		return (action)
+
 
 class EndOfGame(Scene):
-
+	#There is currently no end game at this time.
 	def enter(self):
 		pass
 
@@ -111,8 +131,8 @@ class Map(object):
 		'farm': Field(),
 		'town': TownArea(),
 		'shops': TownShops(),
-		'Square': TownSquare(),
-		'Waterfront': TownWaterfront(),
+		'square': TownSquare(),
+		'waterfront': Waterfront(),
 		'finished': EndOfGame(),
 	}
 
@@ -135,17 +155,20 @@ class Actions(object):
 
 		choice = raw_input("> ").lower()
 
+		while choice == 'time' or choice == 'check time':
+			print gtime.current_time
+			choice = raw_input("> ").lower()
+
 		while self.location == 'home':
 			travel = {'farm': 0, 'town': 1}
 			for i in travel:
 				if i == choice:
 					return i, travel[choice]
 			
-			if choice == 'help' or choice == '' or choice == '?':
-				print travel
-				choice = raw_input("> ").lower()
 
-			print "That is not a place that you can go from here."	
+			print "That is not a place that you can go from here."
+			print "Try these locations:"
+			print travel
 			choice = raw_input("> ").lower()
 
 					
@@ -155,11 +178,9 @@ class Actions(object):
 				if i == choice:
 					return i, travel[choice]
 
-			if choice == 'help' or choice == '' or choice == '?':
-				print travel
-				choice = raw_input("> ").lower()
-
 			print "That is not a place that you can go from here."
+			print "Try these locations:"
+			print travel
 			choice = raw_input("> ").lower()
 
 		while self.location == 'town':
@@ -168,11 +189,9 @@ class Actions(object):
 				if i == choice:
 					return i, travel[choice]
 
-			if choice == 'help' or choice == '' or choice == '?':
-				print travel
-				choice = raw_input("> ").lower()
-
 			print "That is not a place that you can go from here."
+			print "Try these locations:"
+			print travel
 			choice = raw_input("> ").lower()
 					
 		while self.location == 'shops':
@@ -181,11 +200,9 @@ class Actions(object):
 				if i == choice:
 					return i, travel[choice]
 
-			if choice == 'help' or choice == '' or choice == '?':
-				print travel
-				choice = raw_input("> ").lower()
-
 			print "That is not a place that you can go from here."
+			print "Try these locations:"
+			print travel
 			choice = raw_input("> ").lower()
 					
 		while self.location == 'square':
@@ -194,11 +211,9 @@ class Actions(object):
 				if i == choice:
 					return i, travel[choice]
 
-			if choice == 'help' or choice == '' or choice == '?':
-				print travel
-				choice = raw_input("> ").lower()
-
 			print "That is not a place that you can go from here."
+			print "Try these locations:"
+			print travel
 			choice = raw_input("> ").lower()
 					
 		while self.location == 'waterfront':
@@ -207,11 +222,9 @@ class Actions(object):
 				if i == choice:
 					return i, travel[choice]
 
-			if choice == 'help' or choice == '' or choice == '?':
-				print travel
-				choice = raw_input("> ").lower()
-				
 			print "That is not a place that you can go from here."
+			print "Try these locations:"
+			print travel
 			choice = raw_input("> ").lower()
 	
 a_map = Map('home')
